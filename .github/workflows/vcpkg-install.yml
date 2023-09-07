@@ -1,0 +1,60 @@
+name: vcpkg-install
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+  workflow_dispatch:
+
+env:
+  VCPKG_BINARY_SOURCES: clear;nuget,GitHub,read;nugettimeout,3600
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Setup NuGet
+      shell: pwsh
+      run: |
+        nuget sources add `
+          -source "https://nuget.pkg.github.com/${{github.repository_owner}}/index.json" `
+          -storepasswordincleartext `
+          -name "GitHub" `
+          -username "${{github.repository_owner}}" `
+          -password "${{secrets.GITHUB_TOKEN}}"
+        nuget setapikey `
+          "${{secrets.GITHUB_TOKEN}}" `
+          -source "GitHub"
+        nuget sources
+
+    - name: Checkout VCPKG
+      shell: pwsh
+      run:  git clone https://github.com/microsoft/vcpkg.git
+
+    - name: Bootstrap VCPKG
+      shell: pwsh
+      run: |
+        cd vcpkg
+        ./bootstrap-vcpkg.bat
+
+    - name: Provision pango
+      shell: pwsh
+      run: |
+        cd vcpkg
+        ./vcpkg install --debug pango:x64-windows
+
+    - name: Archive VCPKG Log Files
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: buildlogs
+        path: |
+          vcpkg/buildtrees/*/*.txt
+          vcpkg/buildtrees/*/*.log
+
