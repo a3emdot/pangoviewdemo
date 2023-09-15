@@ -33,11 +33,16 @@ jobs:
           -source "GitHub"
         nuget sources
 
-    - name: Checkout VCPKG
-      shell: pwsh
-      run:  git clone https://github.com/microsoft/vcpkg.git
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-    - name: Bootstrap VCPKG
+    - name: Checkout vcpkg
+      uses: actions/checkout@v4
+      with:
+        repository: microsoft/vcpkg
+        path: vcpkg
+
+    - name: Bootstrap vcpkg
       shell: pwsh
       run: |
         cd vcpkg
@@ -48,6 +53,8 @@ jobs:
       run: |
         cd vcpkg
         ./vcpkg install --debug pango:x64-windows
+        dir -Path ./ -Filter fc-match.exe -Recurse | %{$_.FullName}
+        dir -Path ./ -Filter pango-view.exe -Recurse | %{$_.FullName}
 
     - name: Archive VCPKG Log Files
       if: always()
