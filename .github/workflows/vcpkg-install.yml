@@ -56,6 +56,12 @@ jobs:
         dir -Path ./ -Filter fc-match.exe -Recurse | %{$_.FullName}
         dir -Path ./ -Filter pango-view.exe -Recurse | %{$_.FullName}
 
+    - name: Run test
+      shell: pwsh
+      run: |
+        dir
+        cmd.exe /c pangoviewdemo.bat
+
     - name: Archive VCPKG Log Files
       if: always()
       uses: actions/upload-artifact@v3
