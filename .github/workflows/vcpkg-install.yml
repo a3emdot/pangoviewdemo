@@ -63,12 +63,14 @@ jobs:
         cmd.exe /c pangoviewdemo.bat
 
     - name: Build and run Debug build of C++ reproducer
+      if: always()
       shell: pwsh
       run: |
         dir
         cmd.exe /c build-vc2019-win64-debug.bat
 
     - name: Build and run Release build of C++ reproducer
+      if: always()
       shell: pwsh
       run: |
         dir
