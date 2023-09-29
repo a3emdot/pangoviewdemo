@@ -62,6 +62,18 @@ jobs:
         dir
         cmd.exe /c pangoviewdemo.bat
 
+    - name: Build and run Debug build of C++ reproducer
+      shell: pwsh
+      run: |
+        dir
+        cmd.exe /c build-vc2019-win64-debug.bat
+
+    - name: Build and run Release build of C++ reproducer
+      shell: pwsh
+      run: |
+        dir
+        cmd.exe /c build-vc2019-win64-release.bat
+
     - name: Archive VCPKG Log Files
       if: always()
       uses: actions/upload-artifact@v3
