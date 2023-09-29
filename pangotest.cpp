@@ -145,7 +145,7 @@ int main( int argc, char* argv[] )
     }
 
     std::string text = unicodeTestString;
-    std::string font("Roboto");
+    std::string font("Cascadia Code");
     for( int k = 8; k <= 32; k++ ) {
         std::string dir = argv[3];
         std::string dumpName = "textchunk.dump";
