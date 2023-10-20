@@ -52,8 +52,9 @@ jobs:
       shell: pwsh
       run: |
         cd vcpkg
-        ./vcpkg install --debug pango:x64-windows
+        ./vcpkg install --debug harfbuzz[glib,cairo]:x64-windows pango:x64-windows
         dir -Path ./ -Filter fc-match.exe -Recurse | %{$_.FullName}
+        dir -Path ./ -Filter hb-view.exe -Recurse | %{$_.FullName}
         dir -Path ./ -Filter pango-view.exe -Recurse | %{$_.FullName}
 
     - name: Run test
